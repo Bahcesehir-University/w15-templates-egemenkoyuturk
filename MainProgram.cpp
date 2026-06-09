@@ -112,20 +112,25 @@ private:
 public:
     // TODO 6a: default-construct all N elements to T()
     FixedArray() {
-        // replace
+        for(int i = 0; i <N ; i++) data_[i] = T();// replace
     }
 
     // TODO 6b: return N
-    int capacity() const { return 0; }    // <-- replace
+    int capacity() const { return N; }    // <-- replace
 
     // TODO 6c: set data_[index]; throw std::out_of_range if invalid
     void set(int index, const T& value) {
         // replace
+        if (index <0 || index >=N)
+        throw std::out_of_range("FixedArray index out of range");
+        data_[index] = value;
     }
 
     // TODO 6d: return data_[index]; throw std::out_of_range if invalid
     T at(int index) const {
-        return T(); // <-- replace
+        if (index < 0|| index >=N)
+        throw std::out_of_range("FixedArray index out of range");
+        return data_[index]; // <-- replace
     }
 };
 
