@@ -22,7 +22,7 @@
 template <typename T>
 T maxValue(T a, T b) {
     // TODO 1: return the larger of a and b
-    return a; // <-- replace
+    return (a > b)? a : b; // <-- replace
 }
 
 // ---- Group 2: Function template with multiple type parameters --------------
@@ -34,7 +34,7 @@ T maxValue(T a, T b) {
 template <typename T1, typename T2>
 auto addValues(T1 a, T2 b) -> decltype(a + b) {
     // TODO 2: return the sum of a and b
-    return a; // <-- replace
+    return a + b; // <-- replace
 }
 
 // ---- Group 3: Class template ----------------------------------------------
@@ -47,20 +47,23 @@ private:
     B second_;
 public:
     // TODO 3a: constructor that initializes first_ and second_
-    Pair(A first, B second) {
+    Pair(A first, B second) : first_(first), second_(second) {
         // replace with member initialization
     }
 
     // TODO 3b: getters (const)
-    A getFirst() const  { return A(); }   // <-- replace
-    B getSecond() const { return B(); }   // <-- replace
+    A getFirst() const  { return first_; }   // <-- replace
+    B getSecond() const { return second_; }   // <-- replace
 
     // TODO 3c: setters
-    void setFirst(A value)  { }           // <-- replace
-    void setSecond(B value) { }           // <-- replace
+    void setFirst(A value)  {first_ = value ;}           // <-- replace
+    void setSecond(B value) {second_ = value ;}           // <-- replace
 
     // TODO 3d: swapValues - swap first_ and second_ (assume A == B when called)
     void swapValues() {
+        A temp = first_;
+        first_ = static_cast<A>(second_);
+        second_ = static_cast<B>(temp);                 // static cast study them
         // replace
     }
 };
@@ -74,19 +77,28 @@ private:
     std::vector<T> items_;
 public:
     // TODO 4a: add an item to the back
-    void add(const T& item) { }
+    void add(const T& item) {
+        items_.push_back(item);
+    }
 
     // TODO 4b: return number of stored items as int
-    int size() const { return 0; }        // <-- replace
+    int size() const {
+        return static_cast<int>(items_.size()) ;
+    }        // <-- replace
 
     // TODO 4c: return the item at index; throw std::out_of_range if invalid
     T get(int index) const {
-        return T(); // <-- replace
+        if (index < 0 || index >= size())
+            throw std::out_of_range("index is too big");
+        return items_[index]; // <-- replace
     }
 
     // TODO 4d: return the sum of all stored elements
     T total() const {
-        return T(); // <-- replace
+        T sum = T();
+        for (const T& value : items_)
+            sum += value;
+        return sum; // <-- replace
     }
 };
 
@@ -94,7 +106,7 @@ public:
 // TODO 5a: Generic describe() - return 1 for any non-string type.
 template <typename T>
 int describe(const T& value) {
-    return 0; // <-- replace with 1
+    return 1; // <-- replace with 1
 }
 
 // TODO 5b: Full specialization of describe for std::string.
@@ -102,6 +114,10 @@ int describe(const T& value) {
 //          Write the specialization below (template<> int describe<std::string>...).
 //
 //          <-- write your specialization here
+template <>
+int describe<std::string>(const std::string& value){
+    return 2 + static_cast<int>(value.size());                      // I don't understand this part. study it!!!!!!
+}
 
 // ---- Group 6: Non-type template parameter ---------------------------------
 // TODO 6: Complete FixedArray<T, N>, a stack array of compile-time size N.
@@ -112,7 +128,9 @@ private:
 public:
     // TODO 6a: default-construct all N elements to T()
     FixedArray() {
-        for(int i = 0; i <N ; i++) data_[i] = T();// replace
+        for (int i = 0; i < N; i ++){
+            data_[i] = T();
+        }
     }
 
     // TODO 6b: return N
@@ -120,16 +138,16 @@ public:
 
     // TODO 6c: set data_[index]; throw std::out_of_range if invalid
     void set(int index, const T& value) {
-        // replace
-        if (index <0 || index >=N)
-        throw std::out_of_range("FixedArray index out of range");
+        if (index < 0 || index >= N)
+            throw std::out_of_range("index invalid");
         data_[index] = value;
+        // replace
     }
 
     // TODO 6d: return data_[index]; throw std::out_of_range if invalid
     T at(int index) const {
-        if (index < 0|| index >=N)
-        throw std::out_of_range("FixedArray index out of range");
+        if (index < 0 || index >= N)
+            throw std::out_of_range("index invalid");
         return data_[index]; // <-- replace
     }
 };
